@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Icon Designer Pro - Animated Edition</title>
+    <title>Calculadora Zen Designer Pro</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -10,25 +10,24 @@
     
     <style>
         :root {
-            --bg-page: #eef2f7;
-            --bg-calc: #ffffff;
-            --accent: #6366f1;
-            --screen-bg: #f8fafc;
-            --btn-dark: #1e293b;
-            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --bg-calc: #f2f2f2;
+            --border-outer: #e0e0e0;
+            --screen-bg: #ffffff;
+            --keypad-bg: #e6e6e6; 
+            --btn-black: #1a1a1a;
+            --text-gray: #666;
         }
 
         body {
-            background: var(--bg-page);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #fafafa;
+            font-family: system-ui, -apple-system, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            color: #1e293b;
+            padding: 20px;
         }
 
-        /* Contenedor de Exportación con animación sutil */
+        /* Área de Exportación */
         #export-area {
             width: 500px;
             height: 500px;
@@ -36,141 +35,138 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 40px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
+            border-radius: 30px;
         }
 
-        /* Animación constante y tranquila de flotación */
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        /* Animación de flotación suave para la calculadora */
+        @keyframes zenFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .calculator {
-            width: 340px;
+            width: 360px;
             background: var(--bg-calc);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 50px;
-            padding: 25px;
+            border: 1px solid var(--border-outer);
+            border-radius: 55px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            animation: floating 4s ease-in-out infinite;
-        }
-
-        /* Pantalla con efecto de resplandor */
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.1); }
-            50% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
-            100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.1); }
+            gap: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            animation: zenFloat 6s ease-in-out infinite;
         }
 
         .screen {
             background: var(--screen-bg);
-            border: 2px solid #f1f5f9;
-            border-radius: 30px;
-            height: 140px;
+            border-radius: 28px;
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px;
             overflow: hidden;
             position: relative;
-            animation: pulse-glow 3s infinite;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
         }
 
         #math-container {
             transform-origin: center;
-            transition: transform 0.2s ease;
+            transition: transform 0.3s ease;
         }
 
-        /* Teclado */
         .keypad {
-            background: #f1f5f9;
+            background: var(--keypad-bg);
             border-radius: 35px;
-            padding: 15px;
+            padding: 20px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 12px;
+        }
+
+        /* Animación de Presión de Teclas */
+        @keyframes keyPress {
+            0%, 80%, 100% { transform: scale(1); background: var(--btn-black); }
+            40% { transform: scale(0.92); background: #333; }
         }
 
         .btn {
-            background: var(--btn-dark);
+            background: var(--btn-black);
             aspect-ratio: 1 / 1;
-            border-radius: 18px;
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 28px;
-            font-weight: 600;
-            transition: transform 0.2s;
+            font-size: 38px; /* Símbolos más grandes */
+            font-weight: 300;
+            animation: keyPress 4s infinite;
         }
+
+        /* Retrasos para que no se presionen todas a la vez */
+        .btn:nth-child(1) { animation-delay: 0s; }
+        .btn:nth-child(2) { animation-delay: 1s; }
+        .btn:nth-child(3) { animation-delay: 2.5s; }
+        .btn:nth-child(4) { animation-delay: 0.5s; }
+        .btn:nth-child(5) { animation-delay: 1.5s; }
 
         .btn-equal {
             grid-column: 3;
             grid-row: 1 / span 2;
             aspect-ratio: auto;
-            background: var(--accent);
-            font-size: 32px;
+            font-size: 45px;
         }
 
-        /* Panel UI */
+        /* Panel de Control UI */
         .ui-panel {
             margin-top: 30px;
-            width: 450px;
+            width: 400px;
             background: white;
             padding: 25px;
-            border-radius: 24px;
-            box-shadow: var(--shadow);
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .control-group { display: flex; flex-direction: column; gap: 8px; }
         
-        label { font-weight: 600; font-size: 14px; color: #64748b; }
+        label { font-size: 13px; font-weight: 600; color: var(--text-gray); }
 
         textarea {
             padding: 12px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            font-family: 'Fira Code', monospace;
-            resize: none;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            height: 60px;
             outline: none;
         }
 
-        textarea:focus { border-color: var(--accent); }
-
-        .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .download-btn {
-            background: var(--btn-dark);
+            background: var(--btn-black);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 15px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            font-size: 14px;
+            transition: opacity 0.2s;
         }
 
-        .btn-gif { background: var(--accent); }
+        .btn-secondary { background: #666; }
+        .download-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        #status {
-            text-align: center;
+        input[type="range"] { accent-color: var(--btn-black); cursor: pointer; }
+
+        #progress-bar {
             font-size: 12px;
-            color: var(--accent);
-            font-weight: bold;
-            height: 15px;
+            text-align: center;
+            color: #888;
+            height: 14px;
         }
     </style>
 </head>
@@ -195,25 +191,20 @@
     </div>
 
     <div class="ui-panel">
-        <div id="status"></div>
-        
+        <div id="progress-bar"></div>
         <div class="control-group">
-            <label>Fórmula Algebraica (KaTeX):</label>
-            <textarea id="formula-input">\sum_{i=1}^{n} i = \frac{n(n+1)}{2}</textarea>
+            <label>EXPRESIÓN ALGEBRAICA</label>
+            <textarea id="formula-input">\int_{a}^{b} f(x) dx = F(b) - F(a)</textarea>
         </div>
 
         <div class="control-group">
-            <label id="scale-label">Escala de la fórmula: 100%</label>
-            <input type="range" id="scale-slider" min="30" max="250" value="100">
+            <label id="scale-label">TAMAÑO: 100%</label>
+            <input type="range" id="scale-slider" min="30" max="220" value="100">
         </div>
 
-        <div class="button-row">
-            <button class="download-btn" onclick="exportToPNG()">
-                <span>🖼️</span> Descargar PNG
-            </button>
-            <button class="download-btn btn-gif" onclick="exportToGIF()">
-                <span>🎞️</span> Descargar GIF Animado
-            </button>
+        <div class="actions">
+            <button class="download-btn" onclick="exportToPNG()">PNG ESTÁTICO</button>
+            <button id="gif-btn" class="download-btn btn-secondary" onclick="exportToGIF()">DESCARGAR GIF</button>
         </div>
     </div>
 
@@ -223,63 +214,62 @@
         const container = document.getElementById('math-container');
         const slider = document.getElementById('scale-slider');
         const label = document.getElementById('scale-label');
-        const status = document.getElementById('status');
+        const progress = document.getElementById('progress-bar');
+        const gifBtn = document.getElementById('gif-btn');
 
         function update() {
             katex.render(input.value, output, {
                 throwOnError: false,
                 displayMode: true
             });
-
             const scale = slider.value / 100;
             container.style.transform = `scale(${scale})`;
-            label.innerText = `Escala de la fórmula: ${slider.value}%`;
+            label.innerText = `TAMAÑO: ${slider.value}%`;
         }
 
         input.addEventListener('input', update);
         slider.addEventListener('input', update);
         window.addEventListener('load', update);
 
-        // Exportar a PNG estático
         async function exportToPNG() {
             const area = document.getElementById('export-area');
             const canvas = await html2canvas(area, { backgroundColor: null, scale: 3 });
             const link = document.createElement('a');
-            link.download = 'calculadora-pro.png';
+            link.download = 'calculadora-zen.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
         }
 
-        // Exportar a GIF animado
         async function exportToGIF() {
+            gifBtn.disabled = true;
             const area = document.getElementById('export-area');
-            status.innerText = "Capturando cuadros... Por favor espera.";
             
+            // Optimización: Menos frames pero bien distribuidos para captar el movimiento
             const gif = new GIF({
-                workers: 2,
-                quality: 10,
+                workers: 4,
+                quality: 15, // Equilibrio calidad/velocidad
                 width: 500,
                 height: 500,
                 workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js'
             });
 
-            // Capturamos 15 cuadros para un ciclo de animación
-            const totalFrames = 15;
-            for (let i = 0; i < totalFrames; i++) {
-                const canvas = await html2canvas(area, { backgroundColor: '#ffffff', scale: 1 });
-                gif.addFrame(canvas, {delay: 100}); // 100ms por cuadro
-                status.innerText = `Procesando: ${Math.round((i/totalFrames)*100)}%`;
-                await new Promise(r => setTimeout(r, 100)); // Esperar a la animación real
+            const frames = 12; // Suficiente para un loop fluido de 1.2 segundos
+            for (let i = 0; i < frames; i++) {
+                progress.innerText = `Capturando cuadro ${i+1} de ${frames}...`;
+                const canvas = await html2canvas(area, { backgroundColor: '#ffffff', scale: 1.2 });
+                gif.addFrame(canvas, {delay: 100});
+                await new Promise(r => setTimeout(r, 80));
             }
 
-            status.innerText = "Renderizando GIF...";
+            progress.innerText = "Generando archivo final...";
             gif.on('finished', function(blob) {
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'calculadora-animada.gif';
+                link.download = 'calculadora-zen-animada.gif';
                 link.click();
-                status.innerText = "¡Completado!";
-                setTimeout(() => status.innerText = "", 3000);
+                progress.innerText = "¡Listo!";
+                gifBtn.disabled = false;
+                setTimeout(() => progress.innerText = "", 2000);
             });
 
             gif.render();

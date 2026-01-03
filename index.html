@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Zen Pro - 20s Loop Edition</title>
+    <title>Calculadora Zen - 20s Solid Press</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -11,10 +11,8 @@
         :root {
             --calc-body: #f0f0f0;
             --calc-border: #d0d0d0;
-            --screen-inner: #ffffff;
             --btn-face: #a0a0a0; 
             --btn-border: #7a7a7a;
-            --btn-press-color: #888888;
         }
 
         body {
@@ -27,31 +25,22 @@
         }
 
         #export-area-container {
-            padding: 50px;
+            padding: 40px;
             background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Cuerpo de la Calculadora */
+        /* Calculadora Estática (Sin flotar) */
         .calculator {
             width: 360px;
             background: var(--calc-body);
             border-radius: 55px;
             padding: 30px;
             border: 2px solid var(--calc-border);
-            border-bottom: 12px solid var(--calc-border); /* Profundidad sólida */
+            border-bottom: 12px solid var(--calc-border);
             display: flex;
             flex-direction: column;
             gap: 20px;
-            animation: zenFloating 5s ease-in-out infinite;
-            position: relative;
-        }
-
-        @keyframes zenFloating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            position: relative; /* Eliminada la animación zenFloating */
         }
 
         .screen-container {
@@ -61,13 +50,12 @@
         }
 
         .screen {
-            background: var(--screen-inner);
+            background: #fff;
             height: 140px;
             border-radius: 31px;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             border: 1px solid #ccc;
         }
 
@@ -81,23 +69,23 @@
             border: 1px solid #cfcfcf;
         }
 
-        /* Animación de botones (Presión Profunda) */
+        /* Animación de presión mejorada */
         @keyframes solidPress {
-            0%, 10%, 100% { 
+            0%, 20%, 100% { 
                 transform: translateY(0); 
                 border-bottom: 8px solid var(--btn-border); 
             }
             50% { 
                 transform: translateY(6px); 
                 border-bottom: 2px solid var(--btn-border);
-                background: var(--btn-press-color);
+                background: #888;
             }
         }
 
         .btn {
             background: var(--btn-face);
             aspect-ratio: 1/1;
-            border-radius: 50%; /* Totalmente circular */
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -109,21 +97,20 @@
             animation: solidPress 4s infinite ease-in-out;
         }
 
-        /* Botón IGUAL totalmente redondeado (Píldora) */
+        /* Botón Igual Píldora */
         .btn-equal {
             grid-column: 3;
             grid-row: 1 / span 2;
             aspect-ratio: auto;
-            border-radius: 100px; /* Redondeado total arriba y abajo */
+            border-radius: 100px; 
             font-size: 55px;
         }
 
-        /* Delays para que parezca que alguien la usa */
-        .btn:nth-child(1) { animation-delay: 0.2s; }
+        .btn:nth-child(1) { animation-delay: 0s; }
         .btn:nth-child(2) { animation-delay: 1.5s; }
         .btn:nth-child(3) { animation-delay: 3s; }
-        .btn:nth-child(4) { animation-delay: 0.8s; }
-        .btn:nth-child(5) { animation-delay: 2.1s; }
+        .btn:nth-child(4) { animation-delay: 0.7s; }
+        .btn:nth-child(5) { animation-delay: 2.2s; }
 
         .ui-panel {
             margin-top: 20px;
@@ -142,12 +129,13 @@
         .btn-main {
             width: 100%; padding: 15px; margin-top: 8px; border-radius: 12px;
             border: none; background: #333; color: white; font-weight: bold; cursor: pointer;
-            transition: 0.2s;
         }
-        .btn-main:hover { background: #000; }
-        .btn-webm { background: #555; }
         
-        #status { text-align: center; margin-bottom: 10px; font-size: 13px; color: #d9534f; font-weight: bold; }
+        #progress-container {
+            width: 100%; background: #eee; height: 10px; border-radius: 5px; margin-bottom: 10px; display: none;
+        }
+        #progress-bar { width: 0%; background: #333; height: 100%; border-radius: 5px; transition: width 0.1s; }
+        #status { text-align: center; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #444; }
     </style>
 </head>
 <body>
@@ -156,9 +144,7 @@
         <div class="calculator">
             <div class="screen-container">
                 <div class="screen">
-                    <div id="math-container">
-                        <div id="latex-output"></div>
-                    </div>
+                    <div id="math-container"><div id="latex-output"></div></div>
                 </div>
             </div>
             <div class="keypad">
@@ -172,11 +158,14 @@
     </div>
 
     <div class="ui-panel">
-        <div id="status">Lista para exportar.</div>
-        <textarea id="formula-input">P = \frac{V^2}{R}</textarea>
+        <div id="status">Esperando...</div>
+        <div id="progress-container"><div id="progress-bar"></div></div>
+        
+        <textarea id="formula-input">E = mc^2</textarea>
         <input type="range" id="scale-slider" min="50" max="250" value="100" style="width:100%">
-        <button class="btn-main" onclick="exportPNG()">Descargar PNG Transparente</button>
-        <button class="btn-main btn-webm" id="webm-btn" onclick="exportWebM20s()">Descargar WebM (20 Segundos Exactos)</button>
+        
+        <button class="btn-main" onclick="exportPNG()">Descargar PNG</button>
+        <button class="btn-main" id="webm-btn" onclick="exportWebM20s()">Descargar WebM (20s Exactos)</button>
     </div>
 
     <script>
@@ -185,6 +174,8 @@
         const container = document.getElementById('math-container');
         const slider = document.getElementById('scale-slider');
         const status = document.getElementById('status');
+        const pBar = document.getElementById('progress-bar');
+        const pCont = document.getElementById('progress-container');
 
         function update() {
             katex.render(input.value, output, { throwOnError: false, displayMode: true });
@@ -195,58 +186,61 @@
         window.addEventListener('load', update);
 
         async function exportPNG() {
-            status.innerText = "Procesando PNG...";
             const area = document.getElementById('export-area-container');
             const canvas = await html2canvas(area, { backgroundColor: null, scale: 2 });
             const link = document.createElement('a');
-            link.download = 'calc-zen-solid.png';
-            link.href = canvas.toDataURL('image/png');
+            link.download = 'calc-zen.png';
+            link.href = canvas.toDataURL();
             link.click();
-            status.innerText = "PNG Descargado.";
         }
 
         async function exportWebM20s() {
             const btn = document.getElementById('webm-btn');
             btn.disabled = true;
-            status.innerText = "Iniciando grabación de 20 segundos...";
-
+            pCont.style.display = 'block';
+            
             const area = document.getElementById('export-area-container');
-            const durationSecs = 20; 
-            const fps = 24; // FPS óptimo para velocidad de procesamiento
-            const totalFrames = durationSecs * fps;
+            const duration = 20; 
+            const fps = 12; // Optimizado para velocidad de renderizado
+            const totalFrames = duration * fps;
 
             const streamCanvas = document.createElement('canvas');
             streamCanvas.width = area.offsetWidth;
             streamCanvas.height = area.offsetHeight;
             const ctx = streamCanvas.getContext('2d');
             
-            const stream = streamCanvas.captureStream(fps);
+            const stream = streamCanvas.captureStream(0); // Captura manual de frames
             const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
             const chunks = [];
 
-            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+            recorder.ondataavailable = e => chunks.push(e.data);
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: 'video/webm' });
-                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = url;
+                a.href = URL.createObjectURL(blob);
                 a.download = 'calc-zen-20s.webm';
                 a.click();
-                status.innerText = "¡WebM de 20s descargado con éxito!";
+                status.innerText = "¡Descarga completada!";
                 btn.disabled = false;
+                pCont.style.display = 'none';
             };
 
             recorder.start();
 
-            // Lógica de captura cuadro por cuadro para asegurar duración exacta
             for (let i = 0; i < totalFrames; i++) {
-                status.innerText = `Grabando: ${Math.round((i/totalFrames)*100)}% (20s totales)`;
+                const percent = Math.round((i / totalFrames) * 100);
+                status.innerText = `Procesando frame ${i} de ${totalFrames} (${percent}%)`;
+                pBar.style.width = percent + '%';
+
                 const canvas = await html2canvas(area, { backgroundColor: null, scale: 1 });
                 ctx.clearRect(0, 0, streamCanvas.width, streamCanvas.height);
                 ctx.drawImage(canvas, 0, 0);
                 
-                // Pequeña pausa para que el hilo de ejecución no se bloquee
-                await new Promise(r => setTimeout(r, 1000/fps));
+                // Forzamos al grabador a tomar este frame específico
+                stream.getVideoTracks()[0].requestFrame(); 
+                
+                // Pequeño delay para no bloquear el navegador por completo
+                await new Promise(r => setTimeout(r, 10));
             }
 
             recorder.stop();

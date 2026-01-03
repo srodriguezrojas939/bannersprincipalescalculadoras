@@ -1,120 +1,295 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Calculadora Zen – WebM REAL</title>
-<style>
-body{
-    background:#e5e5e5;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:30px;
-    font-family:system-ui;
-}
-button{
-    margin-top:20px;
-    padding:14px 22px;
-    border:none;
-    border-radius:14px;
-    background:#333;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Calculadora Zen Pro - WebM Optimized</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --calc-body: #f0f0f0;
+            --calc-border: #bcbcbc;
+            --screen-inner: #ffffff;
+            --btn-face: #a0a0a0; 
+            --btn-edge: #606060;
+            --btn-border: #7a7a7a;
+        }
+
+        body {
+            background: #dcdcdc;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+        }
+
+        #export-area {
+            width: 550px;
+            height: 650px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* --- ESTADO NORMAL (WebM / Vista) Sin Sombras, con Bordes --- */
+        .calculator {
+            width: 360px;
+            background: var(--calc-body);
+            border-radius: 55px;
+            padding: 30px;
+            border: 4px solid var(--calc-border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            animation: zenFloating 5s ease-in-out infinite;
+            position: relative;
+            box-shadow: none; /* Sin sombras por defecto */
+        }
+
+        .screen-container {
+            background: #d0d0d0;
+            padding: 3px;
+            border-radius: 34px;
+            border: 2px solid #b0b0b0;
+        }
+
+        .screen {
+            background: var(--screen-inner);
+            height: 150px;
+            border-radius: 31px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .keypad {
+            background: #dcdcdc;
+            border-radius: 45px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            border: 3px solid #bcbcbc;
+        }
+
+        .btn {
+            background: var(--btn-face);
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 48px;
+            font-weight: 300;
+            border: 4px solid var(--btn-border);
+            animation: deepPress 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- MODO PNG (Con Profundidad y Sombras) --- */
+        .exporting-png .calculator {
+            box-shadow: 0 14px 0 #bbb, 0 30px 60px rgba(0,0,0,0.25);
+            border: 2px solid #fff;
+        }
+        .exporting-png .btn {
+            box-shadow: 0 8px 0 var(--btn-edge), 0 10px 15px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        .exporting-png .keypad { box-shadow: inset 0 3px 8px rgba(0,0,0,0.15); }
+
+        @keyframes zenFloating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes deepPress {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        .btn:nth-child(1) { animation-delay: 0s; }
+        .btn:nth-child(2) { animation-delay: 1s; }
+        .btn:nth-child(3) { animation-delay: 2.2s; }
+        .btn:nth-child(4) { animation-delay: 0.6s; }
+        .btn:nth-child(5) { animation-delay: 1.6s; }
+
+        .btn-equal {
+            grid-column: 3;
+            grid-row: 1 / span 2;
+            aspect-ratio: auto;
+            border-radius: 50px;
+            font-size: 55px;
+        }
+
+        /* UI Panel */
+        .ui-panel {
+            margin-top: 30px;
+            width: 450px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        textarea { width: 100%; padding: 12px; border-radius: 15px; border: 1px solid #ccc; margin: 10px 0; resize: none; }
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .btn-dl { padding: 15px; border-radius: 15px; border: none; background: #333; color: white; font-weight: bold; cursor: pointer; }
+        .btn-webm { background: #0080ff; }
+        #status { text-align: center; font-size: 13px; margin-bottom: 10px; color: #444; font-weight: 600; }
+    </style>
 </head>
 <body>
 
-<canvas id="scene" width="360" height="520"></canvas>
-<button onclick="record()">Descargar WebM (6s)</button>
+    <div id="export-area">
+        <div class="calculator" id="zen-calc">
+            <div class="screen-container">
+                <div class="screen">
+                    <div id="math-container">
+                        <div id="latex-output"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="keypad">
+                <div class="btn">+</div>
+                <div class="btn">-</div>
+                <div class="btn btn-equal">=</div>
+                <div class="btn">×</div>
+                <div class="btn">÷</div>
+            </div>
+        </div>
+    </div>
 
-<script>
-const canvas = document.getElementById("scene");
-const ctx = canvas.getContext("2d");
+    <div class="ui-panel">
+        <div id="status">Listo para exportar</div>
+        <textarea id="formula-input">\oint_C \mathbf{B} \cdot d\mathbf{l} = \mu_0 I_{enc}</textarea>
+        <input type="range" id="scale-slider" min="50" max="250" value="100" style="width:100%">
+        <div class="actions">
+            <button class="btn-dl" onclick="exportPNG()">PNG CON PROFUNDIDAD</button>
+            <button class="btn-dl btn-webm" onclick="exportWebM()">WEBM 15s (FLUIDO)</button>
+        </div>
+    </div>
 
-let t = 0;
+    <script>
+        const input = document.getElementById('formula-input');
+        const output = document.getElementById('latex-output');
+        const container = document.getElementById('math-container');
+        const slider = document.getElementById('scale-slider');
+        const status = document.getElementById('status');
+        const exportArea = document.getElementById('export-area');
 
-// ===== DIBUJO CALCULADORA =====
-function drawCalculator(press){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+        function update() {
+            katex.render(input.value, output, { throwOnError: false, displayMode: true });
+            container.style.transform = `scale(${slider.value / 100})`;
+        }
 
-    // fondo
-    ctx.fillStyle="#f0f0f0";
-    ctx.beginPath();
-    ctx.roundRect(20,20,320,480,50);
-    ctx.fill();
+        input.addEventListener('input', update);
+        slider.addEventListener('input', update);
+        window.addEventListener('load', update);
 
-    // pantalla
-    ctx.fillStyle="#fff";
-    ctx.beginPath();
-    ctx.roundRect(50,50,260,120,30);
-    ctx.fill();
+        // EXPORTACIÓN PNG: Activa profundidad temporalmente
+        async function exportPNG() {
+            status.innerText = "Generando PNG con profundidad...";
+            exportArea.classList.add('exporting-png');
+            
+            // Pequeña pausa para asegurar que el DOM aplique el estilo
+            await new Promise(r => setTimeout(r, 100));
 
-    // botones
-    const baseY = 210;
-    const size = 70 * (1 - press*0.12); // 🔽 más pequeño
-    const depth = 10 + press*8;         // ⬇️ más grueso
+            const canvas = await html2canvas(exportArea, {
+                backgroundColor: null,
+                scale: 3,
+                logging: false,
+                useCORS: true
+            });
 
-    const buttons = [
-        ["+",60,baseY],
-        ["-",145,baseY],
-        ["=",230,baseY],
-        ["×",60,baseY+90],
-        ["÷",145,baseY+90],
-    ];
+            const link = document.createElement('a');
+            link.download = 'calculadora-zen-3d.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
 
-    buttons.forEach(b=>{
-        ctx.fillStyle="#888";
-        ctx.beginPath();
-        ctx.roundRect(b[1],b[2]+depth,size,size,35);
-        ctx.fill();
+            exportArea.classList.remove('exporting-png');
+            status.innerText = "¡PNG Guardado!";
+        }
 
-        ctx.fillStyle="#aaa";
-        ctx.beginPath();
-        ctx.roundRect(b[1],b[2],size,size,35);
-        ctx.fill();
+        // EXPORTACIÓN WEBM: Alta eficiencia (Graba el Canvas directamente)
+        async function exportWebM() {
+            const duration = 15000; // 15 Segundos según solicitado
+            const width = exportArea.offsetWidth;
+            const height = exportArea.offsetHeight;
 
-        ctx.fillStyle="#333";
-        ctx.font="bold 32px system-ui";
-        ctx.textAlign="center";
-        ctx.textBaseline="middle";
-        ctx.fillText(b[0], b[1]+size/2, b[2]+size/2);
-    });
-}
+            // Crear canvas de grabación
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
 
-// ===== LOOP DE ANIMACIÓN =====
-function animate(){
-    t += 0.03;
-    const press = Math.abs(Math.sin(t)); // 0 → 1 → 0
-    drawCalculator(press);
-    requestAnimationFrame(animate);
-}
-animate();
+            const stream = canvas.captureStream(60); // 60 FPS para fluidez total
+            const recorder = new MediaRecorder(stream, {
+                mimeType: 'video/webm;codecs=vp9',
+                videoBitsPerSecond: 5000000 // Alta calidad
+            });
 
-// ===== GRABAR WEBM =====
-function record(){
-    const stream = canvas.captureStream(60);
-    const recorder = new MediaRecorder(stream,{
-        mimeType:"video/webm;codecs=vp9",
-        videoBitsPerSecond:3_000_000
-    });
+            const chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'calculadora-zen-animada.webm';
+                a.click();
+                status.innerText = "¡WebM descargado (15s)!";
+            };
 
-    const chunks=[];
-    recorder.ondataavailable=e=>chunks.push(e.data);
-    recorder.onstop=()=>{
-        const blob=new Blob(chunks,{type:"video/webm"});
-        const a=document.createElement("a");
-        a.href=URL.createObjectURL(blob);
-        a.download="calculadora-zen.webm";
-        a.click();
-    };
+            status.innerText = "Grabando 15 segundos fluidos...";
+            recorder.start();
 
-    recorder.start();
-    setTimeout(()=>recorder.stop(),6000);
-}
-</script>
+            // Renderizado en tiempo real al canvas sin usar html2canvas en cada frame
+            const startTime = performance.now();
+            
+            function renderFrame() {
+                const now = performance.now();
+                const elapsed = now - startTime;
 
+                // Dibujamos el contenido del DOM al canvas mediante un truco de SVG (rápido)
+                const data = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+                        <foreignObject width="100%" height="100%">
+                            <div xmlns="http://www.w3.org/1999/xhtml">
+                                ${new XMLSerializer().serializeToString(exportArea)}
+                            </div>
+                        </foreignObject>
+                    </svg>`;
+
+                const img = new Image();
+                const svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+                const url = URL.createObjectURL(svg);
+
+                img.onload = () => {
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0);
+                    URL.revokeObjectURL(url);
+                    
+                    if (elapsed < duration) {
+                        requestAnimationFrame(renderFrame);
+                    } else {
+                        recorder.stop();
+                    }
+                };
+                img.src = url;
+                
+                status.innerText = `Grabando: ${Math.round((elapsed/duration)*100)}%`;
+            }
+
+            renderFrame();
+        }
+    </script>
 </body>
 </html>
-

@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Zen Pro - WebM Transparent Edition</title>
+    <title>Calculadora Zen - Sombras Reales</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -14,15 +13,13 @@
             --screen-inner: #ffffff;
             --btn-face: #a0a0a0; 
             --btn-edge: #606060;
-            --btn-press: #808080;
-            /* Sombras dramáticas */
-            --depth-shadow-ambient: 0 30px 60px rgba(0,0,0,0.25), 0 15px 20px rgba(0,0,0,0.15);
-            --calculator-base-edge: 0 14px 0 #bbb;
-            --inner-shadow: inset 0 3px 8px rgba(0,0,0,0.15);
+            /* SOMBRAS MEJORADAS: Más extensas y difuminadas */
+            --depth-shadow-ambient: 0 40px 80px rgba(0,0,0,0.3), 0 20px 30px rgba(0,0,0,0.2);
+            --calculator-base-edge: 0 16px 0 #bbb;
         }
 
         body {
-            background: #dcdcdc; /* Fondo solo para vista previa, no se exporta */
+            background: #ccc; /* Fondo gris para ver la transparencia mientras editas */
             font-family: 'Segoe UI', system-ui, sans-serif;
             display: flex;
             flex-direction: column;
@@ -30,15 +27,15 @@
             padding: 30px;
         }
 
-        /* Contenedor de Exportación TRANSPARENTE */
-        #export-area {
-            width: 550px;
-            height: 620px;
-            background: transparent; /* Transparencia total */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        /* --- CORRECCIÓN CLAVE AQUÍ --- */
+        /* Contenedor de Exportación: MUCHO más grande para que quepan las sombras */
+        #export-area-container {
+            /* Este es el contenedor que se capturará */
+            padding: 80px; /* Espacio extra para que las sombras no se corten */
+            background: transparent; /* Transparente para el PNG */
+            border-radius: 30px;
+            /* Borde temporal para que veas el área real de captura (quítalo si quieres) */
+            border: 1px dashed rgba(0,0,0,0.1); 
         }
 
         /* Cuerpo de la Calculadora */
@@ -47,26 +44,25 @@
             background: var(--calc-body);
             border-radius: 55px;
             padding: 30px;
+            /* Aplicamos las sombras dramáticas */
             box-shadow: var(--calculator-base-edge), var(--depth-shadow-ambient);
             border: 2px solid #fff;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            animation: zenFloating 5s ease-in-out infinite;
-            position: relative;
+            animation: zenFloating 6s ease-in-out infinite;
         }
 
         @keyframes zenFloating {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-18px); /* Flotación más marcada */ }
         }
 
-        /* Pantalla con margen de 3px */
         .screen-container {
             background: #d0d0d0;
-            padding: 3px 0;
+            padding: 4px 0;
             border-radius: 34px;
-            box-shadow: inset 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.15);
         }
 
         .screen {
@@ -79,7 +75,6 @@
             overflow: hidden;
         }
 
-        /* Teclado */
         .keypad {
             background: #dcdcdc;
             border-radius: 45px;
@@ -87,19 +82,12 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            box-shadow: var(--inner-shadow);
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.1);
         }
 
-        /* Animación de presión */
         @keyframes deepPress {
-            0%, 100% { 
-                transform: translateY(0); 
-                box-shadow: 0 8px 0 var(--btn-edge), 0 10px 15px rgba(0,0,0,0.1);
-            }
-            50% { 
-                transform: translateY(8px);
-                box-shadow: 0 0 0 var(--btn-edge), 0 2px 5px rgba(0,0,0,0.05);
-            }
+            0%, 100% { transform: translateY(0); box-shadow: 0 8px 0 var(--btn-edge), 0 15px 25px rgba(0,0,0,0.2); }
+            50% { transform: translateY(8px); box-shadow: 0 0 0 var(--btn-edge), 0 2px 5px rgba(0,0,0,0.05); }
         }
 
         .btn {
@@ -111,18 +99,16 @@
             justify-content: center;
             color: #333;
             font-size: 48px;
-            font-weight: 300;
-            box-shadow: 0 8px 0 var(--btn-edge), 0 10px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 0 var(--btn-edge), 0 15px 25px rgba(0,0,0,0.2);
             animation: deepPress 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        /* Delays para naturalidad */
-        .btn:nth-child(1) { animation-delay: 0s; }
-        .btn:nth-child(2) { animation-delay: 1s; }
-        .btn:nth-child(3) { animation-delay: 2.2s; }
-        .btn:nth-child(4) { animation-delay: 0.6s; }
-        .btn:nth-child(5) { animation-delay: 1.6s; }
+        .btn:nth-child(1) { animation-delay: 0.1s; }
+        .btn:nth-child(2) { animation-delay: 1.1s; }
+        .btn:nth-child(3) { animation-delay: 2.3s; }
+        .btn:nth-child(4) { animation-delay: 0.7s; }
+        .btn:nth-child(5) { animation-delay: 1.7s; }
 
         .btn-equal {
             grid-column: 3;
@@ -134,57 +120,33 @@
 
         /* Panel UI */
         .ui-panel {
-            margin-top: 30px;
+            margin-top: 40px;
             width: 450px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 25px;
+            background: white;
+            padding: 30px;
             border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            z-index: 10;
         }
 
         textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 15px;
-            border: 1px solid #ccc;
-            margin: 10px 0;
-            resize: none;
+            width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #eee;
+            box-sizing: border-box; font-family: monospace; resize: none;
         }
 
-        .actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
+        .btn-main {
+            width: 100%; padding: 15px; margin-top: 10px; border-radius: 15px;
+            border: none; background: #222; color: white; font-weight: bold; cursor: pointer;
         }
-
-        .btn-dl {
-            padding: 15px;
-            border-radius: 15px;
-            border: none;
-            background: #333;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-dl:hover { background: #000; }
+        .btn-main:hover { background: #000; }
         .btn-webm { background: #555; }
         
-        #status {
-            text-align: center;
-            font-size: 13px;
-            margin-top: 10px;
-            color: #444;
-            font-weight: 600;
-        }
+        #status { text-align: center; margin-bottom: 15px; color: #666; font-weight: 600; min-height: 20px;}
     </style>
 </head>
 <body>
 
-    <div id="export-area">
+    <div id="export-area-container">
         <div class="calculator">
             <div class="screen-container">
                 <div class="screen">
@@ -193,7 +155,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="keypad">
                 <div class="btn">+</div>
                 <div class="btn">-</div>
@@ -205,15 +166,11 @@
     </div>
 
     <div class="ui-panel">
-        <div id="status">Listo para exportar</div>
-        <textarea id="formula-input">\oint_C \mathbf{B} \cdot d\mathbf{l} = \mu_0 I_{enc}</textarea>
-        
+        <div id="status">Lista para exportar con sombras.</div>
+        <textarea id="formula-input">\oint \vec{E} \cdot d\vec{A} = \frac{Q_{enc}}{\varepsilon_0}</textarea>
         <input type="range" id="scale-slider" min="50" max="250" value="100" style="width:100%">
-
-        <div class="actions">
-            <button class="btn-dl" onclick="exportPNG()">PNG TRANSPARENTE</button>
-            <button class="btn-dl btn-webm" onclick="exportWebM()">DESCARGAR WEBM</button>
-        </div>
+        <button class="btn-main" onclick="exportPNG()">Descargar PNG (Sombras Completas)</button>
+        <button class="btn-main btn-webm" id="webm-btn" onclick="exportWebM15s()">Descargar WebM (15s Optimizado)</button>
     </div>
 
     <script>
@@ -227,71 +184,88 @@
             katex.render(input.value, output, { throwOnError: false, displayMode: true });
             container.style.transform = `scale(${slider.value / 100})`;
         }
-
         input.addEventListener('input', update);
         slider.addEventListener('input', update);
         window.addEventListener('load', update);
 
-        // EXPORTACIÓN PNG CON SOMBRAS Y TRANSPARENCIA
+        // --- EXPORTAR PNG CON SOMBRAS ---
         async function exportPNG() {
-            status.innerText = "Capturando PNG...";
-            const area = document.getElementById('export-area');
+            status.innerText = "Procesando PNG de alta calidad...";
+            // Capturamos el contenedor GRANDE que incluye el espacio vacío para las sombras
+            const area = document.getElementById('export-area-container');
             const canvas = await html2canvas(area, {
-                backgroundColor: null, // Mantiene la transparencia
-                scale: 3, // Alta calidad
+                backgroundColor: null, // Transparencia
+                scale: 2, // Buena calidad, no excesiva para que no falle
                 logging: false
             });
             const link = document.createElement('a');
-            link.download = 'calculadora-zen.png';
+            link.download = 'calculadora-zen-sombras.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
-            status.innerText = "PNG Guardado con sombras!";
+            status.innerText = "¡PNG descargado!";
+            setTimeout(() => status.innerText = "", 3000);
         }
 
-        // EXPORTACIÓN WEBM (REEMPLAZA AL GIF)
-        async function exportWebM() {
-            const area = document.getElementById('export-area');
-            const frames = [];
-            const duration = 4000; // 4 segundos de animación
-            const fps = 25;
-            const totalFrames = (duration / 1000) * fps;
+        // --- EXPORTAR WEBM 15 SEGUNDOS (OPTIMIZADO) ---
+        async function exportWebM15s() {
+            const btn = document.getElementById('webm-btn');
+            btn.disabled = true;
+            status.innerText = "Iniciando grabación de 15s (Optimizado)...";
+
+            const area = document.getElementById('export-area-container');
             
-            status.innerText = "Preparando grabación WebM...";
-            
-            // Creamos un canvas oculto para procesar el video
+            // CONFIGURACIÓN DE TIEMPO Y CALIDAD
+            const durationSecs = 15;     // Duración exacta
+            const fps = 15;              // BAJAMOS FPS para velocidad (sacrificamos fluidez por rendimiento)
+            const totalFrames = durationSecs * fps;
+            const captureScale = 1;      // Escala nativa (sacrificamos nitidez HD por velocidad)
+
+            // Canvas oculto para el stream de video
             const streamCanvas = document.createElement('canvas');
+            // Usamos el tamaño del área contenedora grande
             streamCanvas.width = area.offsetWidth;
             streamCanvas.height = area.offsetHeight;
             const ctx = streamCanvas.getContext('2d');
             
             const stream = streamCanvas.captureStream(fps);
-            const recorder = new MediaRecorder(stream, {
-                mimeType: 'video/webm;codecs=vp9'
-            });
-
+            // Usamos códec VP9 para mejor compresión WebM si está disponible
+            let options = { mimeType: 'video/webm;codecs=vp9' };
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                options = { mimeType: 'video/webm' }; // Fallback
+            }
+            const recorder = new MediaRecorder(stream, options);
             const chunks = [];
-            recorder.ondataavailable = e => chunks.push(e.data);
+
+            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: 'video/webm' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'calculadora-animada.webm';
+                a.download = `calculadora-zen-${durationSecs}s.webm`;
                 a.click();
-                status.innerText = "¡WebM descargado!";
+                status.innerText = "¡WebM de 15s descargado!";
+                btn.disabled = false;
+                URL.revokeObjectURL(url);
             };
 
             recorder.start();
 
-            // Captura frame por frame
+            // Bucle de captura optimizado
             for (let i = 0; i < totalFrames; i++) {
                 status.innerText = `Grabando: ${Math.round((i/totalFrames)*100)}%`;
+                
+                // Captura rápida a escala 1
                 const canvas = await html2canvas(area, { 
                     backgroundColor: null, 
-                    scale: 1 
+                    scale: captureScale,
+                    logging: false
                 });
+                
                 ctx.clearRect(0, 0, streamCanvas.width, streamCanvas.height);
                 ctx.drawImage(canvas, 0, 0);
+                
+                // Espera para mantener el framerate correcto
                 await new Promise(r => setTimeout(r, 1000/fps));
             }
 

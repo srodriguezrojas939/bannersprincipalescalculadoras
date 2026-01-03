@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Zen - Solid Depth Edition</title>
+    <title>Calculadora Zen Pro - 20s Loop Edition</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -10,9 +10,8 @@
     <style>
         :root {
             --calc-body: #f0f0f0;
-            --calc-border: #d0d0d0; /* Borde más oscuro del color de la figura */
+            --calc-border: #d0d0d0;
             --screen-inner: #ffffff;
-            --screen-border: #cccccc;
             --btn-face: #a0a0a0; 
             --btn-border: #7a7a7a;
             --btn-press-color: #888888;
@@ -27,24 +26,22 @@
             padding: 30px;
         }
 
-        /* Área de exportación sin sombras, solo con el diseño sólido */
         #export-area-container {
-            padding: 40px;
+            padding: 50px;
             background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Cuerpo de la Calculadora con borde de profundidad sólida */
+        /* Cuerpo de la Calculadora */
         .calculator {
             width: 360px;
             background: var(--calc-body);
             border-radius: 55px;
             padding: 30px;
-            /* Profundidad mediante bordes sólidos en lugar de sombras */
             border: 2px solid var(--calc-border);
-            border-bottom: 12px solid var(--calc-border); /* Base sólida */
+            border-bottom: 12px solid var(--calc-border); /* Profundidad sólida */
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -54,10 +51,9 @@
 
         @keyframes zenFloating {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
 
-        /* Pantalla con margen y borde sólido */
         .screen-container {
             background: #d8d8d8;
             padding: 3px 0;
@@ -72,7 +68,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 1px solid var(--screen-border);
+            border: 1px solid #ccc;
         }
 
         .keypad {
@@ -85,14 +81,14 @@
             border: 1px solid #cfcfcf;
         }
 
-        /* Animación de botones: Profundidad sólida que se "encoge" */
+        /* Animación de botones (Presión Profunda) */
         @keyframes solidPress {
-            0%, 100% { 
+            0%, 10%, 100% { 
                 transform: translateY(0); 
-                border-bottom: 6px solid var(--btn-border); 
+                border-bottom: 8px solid var(--btn-border); 
             }
             50% { 
-                transform: translateY(4px); 
+                transform: translateY(6px); 
                 border-bottom: 2px solid var(--btn-border);
                 background: var(--btn-press-color);
             }
@@ -101,7 +97,7 @@
         .btn {
             background: var(--btn-face);
             aspect-ratio: 1/1;
-            border-radius: 50%;
+            border-radius: 50%; /* Totalmente circular */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -109,28 +105,28 @@
             font-size: 45px;
             font-weight: bold;
             border: 2px solid var(--btn-border);
-            border-bottom: 6px solid var(--btn-border);
+            border-bottom: 8px solid var(--btn-border);
             animation: solidPress 4s infinite ease-in-out;
-            transition: background 0.2s;
         }
 
-        .btn:nth-child(1) { animation-delay: 0s; }
-        .btn:nth-child(2) { animation-delay: 1.2s; }
-        .btn:nth-child(3) { animation-delay: 2.5s; }
-        .btn:nth-child(4) { animation-delay: 0.6s; }
-        .btn:nth-child(5) { animation-delay: 1.8s; }
-
+        /* Botón IGUAL totalmente redondeado (Píldora) */
         .btn-equal {
             grid-column: 3;
             grid-row: 1 / span 2;
             aspect-ratio: auto;
-            border-radius: 40px;
-            font-size: 50px;
+            border-radius: 100px; /* Redondeado total arriba y abajo */
+            font-size: 55px;
         }
 
-        /* Panel UI */
+        /* Delays para que parezca que alguien la usa */
+        .btn:nth-child(1) { animation-delay: 0.2s; }
+        .btn:nth-child(2) { animation-delay: 1.5s; }
+        .btn:nth-child(3) { animation-delay: 3s; }
+        .btn:nth-child(4) { animation-delay: 0.8s; }
+        .btn:nth-child(5) { animation-delay: 2.1s; }
+
         .ui-panel {
-            margin-top: 30px;
+            margin-top: 20px;
             width: 420px;
             background: white;
             padding: 25px;
@@ -144,12 +140,14 @@
         }
 
         .btn-main {
-            width: 100%; padding: 14px; margin-top: 8px; border-radius: 12px;
+            width: 100%; padding: 15px; margin-top: 8px; border-radius: 12px;
             border: none; background: #333; color: white; font-weight: bold; cursor: pointer;
+            transition: 0.2s;
         }
-        .btn-webm { background: #666; }
+        .btn-main:hover { background: #000; }
+        .btn-webm { background: #555; }
         
-        #status { text-align: center; margin-bottom: 10px; font-size: 13px; color: #444; font-weight: bold; }
+        #status { text-align: center; margin-bottom: 10px; font-size: 13px; color: #d9534f; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -174,11 +172,11 @@
     </div>
 
     <div class="ui-panel">
-        <div id="status">Bordes sólidos activos.</div>
-        <textarea id="formula-input">f(x) = \int_{a}^{b} g(t) \, dt</textarea>
+        <div id="status">Lista para exportar.</div>
+        <textarea id="formula-input">P = \frac{V^2}{R}</textarea>
         <input type="range" id="scale-slider" min="50" max="250" value="100" style="width:100%">
-        <button class="btn-main" onclick="exportPNG()">Descargar PNG (Transparente)</button>
-        <button class="btn-main btn-webm" id="webm-btn" onclick="exportWebM5s()">Descargar WebM (5 Segundos)</button>
+        <button class="btn-main" onclick="exportPNG()">Descargar PNG Transparente</button>
+        <button class="btn-main btn-webm" id="webm-btn" onclick="exportWebM20s()">Descargar WebM (20 Segundos Exactos)</button>
     </div>
 
     <script>
@@ -197,9 +195,9 @@
         window.addEventListener('load', update);
 
         async function exportPNG() {
-            status.innerText = "Capturando PNG...";
+            status.innerText = "Procesando PNG...";
             const area = document.getElementById('export-area-container');
-            const canvas = await html2canvas(area, { backgroundColor: null, scale: 3 });
+            const canvas = await html2canvas(area, { backgroundColor: null, scale: 2 });
             const link = document.createElement('a');
             link.download = 'calc-zen-solid.png';
             link.href = canvas.toDataURL('image/png');
@@ -207,14 +205,14 @@
             status.innerText = "PNG Descargado.";
         }
 
-        async function exportWebM5s() {
+        async function exportWebM20s() {
             const btn = document.getElementById('webm-btn');
             btn.disabled = true;
-            status.innerText = "Grabando 5 segundos...";
+            status.innerText = "Iniciando grabación de 20 segundos...";
 
             const area = document.getElementById('export-area-container');
-            const durationSecs = 5; 
-            const fps = 30; // 30 FPS para máxima fluidez
+            const durationSecs = 20; 
+            const fps = 24; // FPS óptimo para velocidad de procesamiento
             const totalFrames = durationSecs * fps;
 
             const streamCanvas = document.createElement('canvas');
@@ -226,24 +224,28 @@
             const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
             const chunks = [];
 
-            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: 'video/webm' });
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'calc-zen-5s.webm';
+                a.href = url;
+                a.download = 'calc-zen-20s.webm';
                 a.click();
-                status.innerText = "¡WebM de 5s listo!";
+                status.innerText = "¡WebM de 20s descargado con éxito!";
                 btn.disabled = false;
             };
 
             recorder.start();
 
+            // Lógica de captura cuadro por cuadro para asegurar duración exacta
             for (let i = 0; i < totalFrames; i++) {
-                status.innerText = `Grabando: ${Math.round((i/totalFrames)*100)}%`;
+                status.innerText = `Grabando: ${Math.round((i/totalFrames)*100)}% (20s totales)`;
                 const canvas = await html2canvas(area, { backgroundColor: null, scale: 1 });
                 ctx.clearRect(0, 0, streamCanvas.width, streamCanvas.height);
                 ctx.drawImage(canvas, 0, 0);
+                
+                // Pequeña pausa para que el hilo de ejecución no se bloquee
                 await new Promise(r => setTimeout(r, 1000/fps));
             }
 

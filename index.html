@@ -1,250 +1,210 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Calculadora Zen - 20s Solid Press</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <style>
-        :root {
-            --calc-body: #f0f0f0;
-            --calc-border: #d0d0d0;
-            --btn-face: #a0a0a0; 
-            --btn-border: #7a7a7a;
-        }
+<meta charset="UTF-8">
+<title>Calculadora Zen – WebM Correcto</title>
 
-        body {
-            background: #e5e5e5;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px;
-        }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-        #export-area-container {
-            padding: 40px;
-            background: transparent;
-        }
+<style>
+:root {
+    --calc-body:#f0f0f0;
+    --calc-border:#d0d0d0;
+    --btn-face:#a0a0a0;
+    --btn-border:#7a7a7a;
+}
 
-        /* Calculadora Estática (Sin flotar) */
-        .calculator {
-            width: 360px;
-            background: var(--calc-body);
-            border-radius: 55px;
-            padding: 30px;
-            border: 2px solid var(--calc-border);
-            border-bottom: 12px solid var(--calc-border);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: relative; /* Eliminada la animación zenFloating */
-        }
+body{
+    background:#e5e5e5;
+    font-family:system-ui;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:30px;
+}
 
-        .screen-container {
-            background: #d8d8d8;
-            padding: 3px 0;
-            border-radius: 34px;
-        }
+.calculator{
+    width:360px;
+    background:var(--calc-body);
+    border-radius:55px;
+    padding:30px;
+    border:2px solid var(--calc-border);
+    border-bottom:12px solid var(--calc-border);
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
 
-        .screen {
-            background: #fff;
-            height: 140px;
-            border-radius: 31px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ccc;
-        }
+.screen-container{
+    background:#d8d8d8;
+    padding:3px;
+    border-radius:34px;
+}
 
-        .keypad {
-            background: #e2e2e2;
-            border-radius: 45px;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            border: 1px solid #cfcfcf;
-        }
+.screen{
+    background:#fff;
+    height:140px;
+    border-radius:31px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
-        /* Animación de presión mejorada */
-        @keyframes solidPress {
-            0%, 20%, 100% { 
-                transform: translateY(0); 
-                border-bottom: 8px solid var(--btn-border); 
-            }
-            50% { 
-                transform: translateY(6px); 
-                border-bottom: 2px solid var(--btn-border);
-                background: #888;
-            }
-        }
+.keypad{
+    background:#e2e2e2;
+    border-radius:45px;
+    padding:20px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
 
-        .btn {
-            background: var(--btn-face);
-            aspect-ratio: 1/1;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-size: 45px;
-            font-weight: bold;
-            border: 2px solid var(--btn-border);
-            border-bottom: 8px solid var(--btn-border);
-            animation: solidPress 4s infinite ease-in-out;
-        }
+@keyframes solidPress{
+    0%,20%,100%{transform:translateY(0)}
+    50%{transform:translateY(6px);background:#888}
+}
 
-        /* Botón Igual Píldora */
-        .btn-equal {
-            grid-column: 3;
-            grid-row: 1 / span 2;
-            aspect-ratio: auto;
-            border-radius: 100px; 
-            font-size: 55px;
-        }
+.btn{
+    background:var(--btn-face);
+    aspect-ratio:1/1;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+    font-weight:bold;
+    border:2px solid var(--btn-border);
+    border-bottom:8px solid var(--btn-border);
+    animation:solidPress 4s infinite ease-in-out;
+}
 
-        .btn:nth-child(1) { animation-delay: 0s; }
-        .btn:nth-child(2) { animation-delay: 1.5s; }
-        .btn:nth-child(3) { animation-delay: 3s; }
-        .btn:nth-child(4) { animation-delay: 0.7s; }
-        .btn:nth-child(5) { animation-delay: 2.2s; }
+.btn-equal{
+    grid-column:3;
+    grid-row:1/span 2;
+    aspect-ratio:auto;
+    border-radius:100px;
+    font-size:55px;
+}
 
-        .ui-panel {
-            margin-top: 20px;
-            width: 420px;
-            background: white;
-            padding: 25px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
+.btn:nth-child(1){animation-delay:0s}
+.btn:nth-child(2){animation-delay:1.5s}
+.btn:nth-child(3){animation-delay:3s}
+.btn:nth-child(4){animation-delay:.7s}
+.btn:nth-child(5){animation-delay:2.2s}
 
-        textarea {
-            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
-            box-sizing: border-box; font-family: monospace; resize: none; margin-bottom: 10px;
-        }
+.ui{
+    margin-top:20px;
+    background:white;
+    padding:25px;
+    border-radius:25px;
+    width:420px;
+}
 
-        .btn-main {
-            width: 100%; padding: 15px; margin-top: 8px; border-radius: 12px;
-            border: none; background: #333; color: white; font-weight: bold; cursor: pointer;
-        }
-        
-        #progress-container {
-            width: 100%; background: #eee; height: 10px; border-radius: 5px; margin-bottom: 10px; display: none;
-        }
-        #progress-bar { width: 0%; background: #333; height: 100%; border-radius: 5px; transition: width 0.1s; }
-        #status { text-align: center; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #444; }
-    </style>
+textarea{
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    margin-bottom:10px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#333;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+</style>
 </head>
+
 <body>
 
-    <div id="export-area-container">
-        <div class="calculator">
-            <div class="screen-container">
-                <div class="screen">
-                    <div id="math-container"><div id="latex-output"></div></div>
-                </div>
-            </div>
-            <div class="keypad">
-                <div class="btn">+</div>
-                <div class="btn">-</div>
-                <div class="btn btn-equal">=</div>
-                <div class="btn">×</div>
-                <div class="btn">÷</div>
+<div id="capture-area">
+    <div class="calculator">
+        <div class="screen-container">
+            <div class="screen">
+                <div id="latex-output"></div>
             </div>
         </div>
+        <div class="keypad">
+            <div class="btn">+</div>
+            <div class="btn">-</div>
+            <div class="btn btn-equal">=</div>
+            <div class="btn">×</div>
+            <div class="btn">÷</div>
+        </div>
     </div>
+</div>
 
-    <div class="ui-panel">
-        <div id="status">Esperando...</div>
-        <div id="progress-container"><div id="progress-bar"></div></div>
-        
-        <textarea id="formula-input">E = mc^2</textarea>
-        <input type="range" id="scale-slider" min="50" max="250" value="100" style="width:100%">
-        
-        <button class="btn-main" onclick="exportPNG()">Descargar PNG</button>
-        <button class="btn-main" id="webm-btn" onclick="exportWebM20s()">Descargar WebM (20s Exactos)</button>
-    </div>
+<div class="ui">
+    <textarea id="formula">E = mc^2</textarea>
+    <button onclick="exportWebM()">Descargar WebM (20s)</button>
+    <p id="status"></p>
+</div>
 
-    <script>
-        const input = document.getElementById('formula-input');
-        const output = document.getElementById('latex-output');
-        const container = document.getElementById('math-container');
-        const slider = document.getElementById('scale-slider');
-        const status = document.getElementById('status');
-        const pBar = document.getElementById('progress-bar');
-        const pCont = document.getElementById('progress-container');
+<script>
+const formula = document.getElementById('formula');
+const output = document.getElementById('latex-output');
+const status = document.getElementById('status');
 
-        function update() {
-            katex.render(input.value, output, { throwOnError: false, displayMode: true });
-            container.style.transform = `scale(${slider.value / 100})`;
-        }
-        input.addEventListener('input', update);
-        slider.addEventListener('input', update);
-        window.addEventListener('load', update);
+function render(){
+    katex.render(formula.value, output, {throwOnError:false,displayMode:true});
+}
+formula.addEventListener('input',render);
+render();
 
-        async function exportPNG() {
-            const area = document.getElementById('export-area-container');
-            const canvas = await html2canvas(area, { backgroundColor: null, scale: 2 });
-            const link = document.createElement('a');
-            link.download = 'calc-zen.png';
-            link.href = canvas.toDataURL();
-            link.click();
-        }
+async function exportWebM(){
+    status.innerText="Grabando WebM…";
 
-        async function exportWebM20s() {
-            const btn = document.getElementById('webm-btn');
-            btn.disabled = true;
-            pCont.style.display = 'block';
-            
-            const area = document.getElementById('export-area-container');
-            const duration = 20; 
-            const fps = 12; // Optimizado para velocidad de renderizado
-            const totalFrames = duration * fps;
+    const area = document.getElementById('capture-area');
+    const rect = area.getBoundingClientRect();
 
-            const streamCanvas = document.createElement('canvas');
-            streamCanvas.width = area.offsetWidth;
-            streamCanvas.height = area.offsetHeight;
-            const ctx = streamCanvas.getContext('2d');
-            
-            const stream = streamCanvas.captureStream(0); // Captura manual de frames
-            const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
-            const chunks = [];
+    const canvas = document.createElement('canvas');
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    const ctx = canvas.getContext('2d');
 
-            recorder.ondataavailable = e => chunks.push(e.data);
-            recorder.onstop = () => {
-                const blob = new Blob(chunks, { type: 'video/webm' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = 'calc-zen-20s.webm';
-                a.click();
-                status.innerText = "¡Descarga completada!";
-                btn.disabled = false;
-                pCont.style.display = 'none';
-            };
+    const stream = canvas.captureStream(30);
+    const recorder = new MediaRecorder(stream,{
+        mimeType:'video/webm;codecs=vp9',
+        videoBitsPerSecond:4_000_000
+    });
 
-            recorder.start();
+    const chunks=[];
+    recorder.ondataavailable=e=>chunks.push(e.data);
+    recorder.onstop=()=>{
+        const blob=new Blob(chunks,{type:'video/webm'});
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='calculadora-zen.webm';
+        a.click();
+        status.innerText="Listo ✔";
+    };
 
-            for (let i = 0; i < totalFrames; i++) {
-                const percent = Math.round((i / totalFrames) * 100);
-                status.innerText = `Procesando frame ${i} de ${totalFrames} (${percent}%)`;
-                pBar.style.width = percent + '%';
+    recorder.start();
 
-                const canvas = await html2canvas(area, { backgroundColor: null, scale: 1 });
-                ctx.clearRect(0, 0, streamCanvas.width, streamCanvas.height);
-                ctx.drawImage(canvas, 0, 0);
-                
-                // Forzamos al grabador a tomar este frame específico
-                stream.getVideoTracks()[0].requestFrame(); 
-                
-                // Pequeño delay para no bloquear el navegador por completo
-                await new Promise(r => setTimeout(r, 10));
-            }
+    let running=true;
+    async function draw(){
+        if(!running)return;
+        const snap=await html2canvas(area,{backgroundColor:null,scale:1});
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(snap,0,0);
+        requestAnimationFrame(draw);
+    }
+    draw();
 
-            recorder.stop();
-        }
-    </script>
+    setTimeout(()=>{
+        running=false;
+        recorder.stop();
+    },20000);
+}
+</script>
+
 </body>
 </html>

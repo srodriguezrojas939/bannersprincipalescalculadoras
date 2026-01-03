@@ -2,181 +2,186 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora Zen Designer Pro</title>
+    <title>Calculadora Zen Depth Pro</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
     
     <style>
         :root {
-            --bg-calc: #f2f2f2;
-            --border-outer: #e0e0e0;
-            --screen-bg: #ffffff;
-            --keypad-bg: #e6e6e6; 
-            --btn-black: #1a1a1a;
-            --text-gray: #666;
+            --bg-page: #f0f0f0;
+            --calc-body: #f2f2f2;
+            --screen-inner: #ffffff;
+            --btn-base: #1a1a1a;
+            --depth-shadow: 0 20px 50px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.05);
+            --inner-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
 
         body {
-            background: #fafafa;
-            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg-page);
+            font-family: 'Segoe UI', system-ui, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
         }
 
-        /* Área de Exportación */
+        /* Contenedor de Exportación */
         #export-area {
             width: 500px;
-            height: 500px;
-            background: white;
+            height: 540px;
+            background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 30px;
+            border-radius: 40px;
         }
 
-        /* Animación de flotación suave para la calculadora */
-        @keyframes zenFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
+        /* Cuerpo de la Calculadora con Profundidad */
         .calculator {
-            width: 360px;
-            background: var(--bg-calc);
-            border: 1px solid var(--border-outer);
-            border-radius: 55px;
-            padding: 30px;
+            width: 350px;
+            background: var(--calc-body);
+            border-radius: 50px;
+            padding: 25px;
+            box-shadow: var(--depth-shadow);
+            border: 1px solid #ffffff;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-            animation: zenFloat 6s ease-in-out infinite;
+            gap: 15px; /* Espaciado general */
+            animation: floating 5s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Pantalla con margen de 3px y profundidad */
+        .screen-container {
+            background: #e0e0e0; /* El borde gris que crea el margen */
+            padding: 3px 0; /* Margen superior e inferior de 3px */
+            border-radius: 32px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .screen {
-            background: var(--screen-bg);
-            border-radius: 28px;
-            height: 150px;
+            background: var(--screen-inner);
+            height: 140px;
+            border-radius: 29px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
         }
 
-        #math-container {
-            transform-origin: center;
-            transition: transform 0.3s ease;
-        }
-
+        /* Teclado */
         .keypad {
-            background: var(--keypad-bg);
-            border-radius: 35px;
+            background: #e8e8e8;
+            border-radius: 40px;
             padding: 20px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 15px;
+            box-shadow: var(--inner-shadow);
         }
 
-        /* Animación de Presión de Teclas */
-        @keyframes keyPress {
-            0%, 80%, 100% { transform: scale(1); background: var(--btn-black); }
-            40% { transform: scale(0.92); background: #333; }
+        /* Animación de presión profunda */
+        @keyframes deepPress {
+            0%, 100% { transform: translateZ(0) scale(1); box-shadow: 0 5px 0 #000; }
+            50% { transform: translateY(4px) scale(0.94); box-shadow: 0 0 0 #000; }
         }
 
         .btn {
-            background: var(--btn-black);
-            aspect-ratio: 1 / 1;
-            border-radius: 22px;
+            background: var(--btn-base);
+            aspect-ratio: 1/1;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 38px; /* Símbolos más grandes */
+            font-size: 40px;
             font-weight: 300;
-            animation: keyPress 4s infinite;
+            box-shadow: 0 6px 0 #000;
+            animation: deepPress 4s infinite ease-in-out;
         }
 
-        /* Retrasos para que no se presionen todas a la vez */
-        .btn:nth-child(1) { animation-delay: 0s; }
-        .btn:nth-child(2) { animation-delay: 1s; }
+        /* Escalonamiento de animación para naturalidad */
+        .btn:nth-child(1) { animation-delay: 0.2s; }
+        .btn:nth-child(2) { animation-delay: 1.2s; }
         .btn:nth-child(3) { animation-delay: 2.5s; }
-        .btn:nth-child(4) { animation-delay: 0.5s; }
-        .btn:nth-child(5) { animation-delay: 1.5s; }
+        .btn:nth-child(4) { animation-delay: 0.8s; }
+        .btn:nth-child(5) { animation-delay: 1.8s; }
 
         .btn-equal {
             grid-column: 3;
             grid-row: 1 / span 2;
             aspect-ratio: auto;
-            font-size: 45px;
+            font-size: 50px;
         }
 
-        /* Panel de Control UI */
+        /* Panel UI */
         .ui-panel {
-            margin-top: 30px;
-            width: 400px;
+            margin-top: 25px;
+            width: 420px;
             background: white;
             padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .control-group { display: flex; flex-direction: column; gap: 8px; }
-        
-        label { font-size: 13px; font-weight: 600; color: var(--text-gray); }
-
         textarea {
+            width: 100%;
             padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            font-family: monospace;
-            height: 60px;
-            outline: none;
-        }
-
-        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        .download-btn {
-            background: var(--btn-black);
-            color: white;
-            border: none;
-            padding: 15px;
             border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: opacity 0.2s;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            font-family: monospace;
+            resize: none;
         }
 
-        .btn-secondary { background: #666; }
-        .download-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .download-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
 
-        input[type="range"] { accent-color: var(--btn-black); cursor: pointer; }
+        .main-btn {
+            padding: 15px;
+            border-radius: 15px;
+            border: none;
+            background: #1a1a1a;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-        #progress-bar {
+        .main-btn:disabled { background: #ccc; }
+        
+        #status-msg {
             font-size: 12px;
             text-align: center;
-            color: #888;
-            height: 14px;
+            color: #666;
+            min-height: 15px;
         }
+
+        input[type="range"] { accent-color: #000; }
     </style>
 </head>
 <body>
 
     <div id="export-area">
         <div class="calculator">
-            <div class="screen">
-                <div id="math-container">
-                    <div id="latex-output"></div>
+            <div class="screen-container">
+                <div class="screen">
+                    <div id="math-container">
+                        <div id="latex-output"></div>
+                    </div>
                 </div>
             </div>
             
@@ -191,20 +196,15 @@
     </div>
 
     <div class="ui-panel">
-        <div id="progress-bar"></div>
-        <div class="control-group">
-            <label>EXPRESIÓN ALGEBRAICA</label>
-            <textarea id="formula-input">\int_{a}^{b} f(x) dx = F(b) - F(a)</textarea>
-        </div>
+        <div id="status-msg"></div>
+        <textarea id="formula-input">\nabla \cdot \mathbf{E} = \frac{\rho}{\epsilon_0}</textarea>
+        
+        <label id="scale-label">Tamaño Formula: 100%</label>
+        <input type="range" id="scale-slider" min="40" max="240" value="100">
 
-        <div class="control-group">
-            <label id="scale-label">TAMAÑO: 100%</label>
-            <input type="range" id="scale-slider" min="30" max="220" value="100">
-        </div>
-
-        <div class="actions">
-            <button class="download-btn" onclick="exportToPNG()">PNG ESTÁTICO</button>
-            <button id="gif-btn" class="download-btn btn-secondary" onclick="exportToGIF()">DESCARGAR GIF</button>
+        <div class="download-area">
+            <button class="main-btn" onclick="exportPNG()">PNG HD</button>
+            <button class="main-btn" id="gif-btn" onclick="exportGIF()">GIF ANIMADO</button>
         </div>
     </div>
 
@@ -214,62 +214,59 @@
         const container = document.getElementById('math-container');
         const slider = document.getElementById('scale-slider');
         const label = document.getElementById('scale-label');
-        const progress = document.getElementById('progress-bar');
-        const gifBtn = document.getElementById('gif-btn');
+        const statusMsg = document.getElementById('status-msg');
 
         function update() {
-            katex.render(input.value, output, {
-                throwOnError: false,
-                displayMode: true
-            });
+            katex.render(input.value, output, { throwOnError: false, displayMode: true });
             const scale = slider.value / 100;
             container.style.transform = `scale(${scale})`;
-            label.innerText = `TAMAÑO: ${slider.value}%`;
+            label.innerText = `Tamaño Formula: ${slider.value}%`;
         }
 
         input.addEventListener('input', update);
         slider.addEventListener('input', update);
         window.addEventListener('load', update);
 
-        async function exportToPNG() {
+        async function exportPNG() {
             const area = document.getElementById('export-area');
-            const canvas = await html2canvas(area, { backgroundColor: null, scale: 3 });
+            const canvas = await html2canvas(area, { scale: 3, backgroundColor: null });
             const link = document.createElement('a');
             link.download = 'calculadora-zen.png';
-            link.href = canvas.toDataURL('image/png');
+            link.href = canvas.toDataURL();
             link.click();
         }
 
-        async function exportToGIF() {
-            gifBtn.disabled = true;
+        async function exportGIF() {
+            const btn = document.getElementById('gif-btn');
+            btn.disabled = true;
+            statusMsg.innerText = "Capturando cuadros HD...";
+
             const area = document.getElementById('export-area');
-            
-            // Optimización: Menos frames pero bien distribuidos para captar el movimiento
             const gif = new GIF({
-                workers: 4,
-                quality: 15, // Equilibrio calidad/velocidad
+                workers: 2,
+                quality: 10,
                 width: 500,
-                height: 500,
-                workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js'
+                height: 540,
+                workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js'
             });
 
-            const frames = 12; // Suficiente para un loop fluido de 1.2 segundos
-            for (let i = 0; i < frames; i++) {
-                progress.innerText = `Capturando cuadro ${i+1} de ${frames}...`;
-                const canvas = await html2canvas(area, { backgroundColor: '#ffffff', scale: 1.2 });
-                gif.addFrame(canvas, {delay: 100});
-                await new Promise(r => setTimeout(r, 80));
+            // Capturamos 10 cuadros (suficiente para fluidez y rapidez)
+            for (let i = 0; i < 10; i++) {
+                const canvas = await html2canvas(area, { scale: 1.5, backgroundColor: '#ffffff' });
+                gif.addFrame(canvas, {delay: 120});
+                statusMsg.innerText = `Procesando: ${((i+1)*10)}%`;
+                await new Promise(r => setTimeout(r, 100));
             }
 
-            progress.innerText = "Generando archivo final...";
+            statusMsg.innerText = "Finalizando archivo...";
             gif.on('finished', function(blob) {
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'calculadora-zen-animada.gif';
+                link.download = 'calculadora-zen.gif';
                 link.click();
-                progress.innerText = "¡Listo!";
-                gifBtn.disabled = false;
-                setTimeout(() => progress.innerText = "", 2000);
+                statusMsg.innerText = "¡Descarga completa!";
+                btn.disabled = false;
+                setTimeout(() => statusMsg.innerText = "", 3000);
             });
 
             gif.render();
